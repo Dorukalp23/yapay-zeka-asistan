@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Yapay Zekâ Asistanı</title>
+</head>
+<body>
+    <h2>Yapay Zekâ Asistanı</h2>
+    <textarea id="userInput" rows="4" cols="50" placeholder="Bir şeyler yaz..."></textarea><br>
+    <button onclick="sendMessage()">Gönder</button>
+    <pre id="responseArea"></pre>
+
+    <script>
+        async function sendMessage() {
+            const message = document.getElementById("userInput").value;
+            const responseArea = document.getElementById("responseArea");
+            responseArea.textContent = "Yanıt bekleniyor...";
+
+            const response = await fetch("http://localhost:5000/api/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ message })
+            });
+
+            const data = await response.json();
+            responseArea.textContent = data.reply;
+        }
+    </script>
+</body>
+</html>
