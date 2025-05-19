@@ -1,14 +1,19 @@
-
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
 import openai
 
-app = Flask(__name__)
-CORS(app)  # Frontend ile backend farklı portta çalışıyorsa CORS gerekir
+app = Flask(__name__, static_folder='public')
+CORS(app)
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+# Ana sayfa: index.html dosyasını göster
+@app.route("/")
+def serve_index():
+    return send_from_directory("public", "index.html")
+
+# API endpoint
 @app.route("/api/chat", methods=["POST"])
 def chat():
     data = request.json
