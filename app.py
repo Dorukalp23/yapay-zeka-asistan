@@ -1,12 +1,12 @@
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import openai
 
 app = Flask(__name__)
 CORS(app)
 
-openai.api_key = "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"
+openai.api_key = "BURAYA_OPENAI_API_ANAHTARINI_YAZ"
 
 @app.route("/api/chat", methods=["POST"])
 def chat():
@@ -19,13 +19,18 @@ def chat():
     response = openai.ChatCompletion.create(
         model="gpt-4",
         messages=[
-            {"role": "system", "content": "Sen kibar ve yardımsever bir yapay zekâ asistanısın."},
+            {"role": "system", "content": "Sen yardımsever bir yapay zekâ asistanısın."},
             {"role": "user", "content": user_message}
         ]
     )
 
     reply = response["choices"][0]["message"]["content"]
     return jsonify({"reply": reply})
+
+# 💡 index.html dosyasını tarayıcıda göstermek için:
+@app.route("/")
+def serve_index():
+    return send_from_directory(".", "index.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
